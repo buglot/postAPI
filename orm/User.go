@@ -1,7 +1,6 @@
 package orm
 
 import (
-	"github.com/buglot/postAPI/orm"
 	"gorm.io/gorm"
 )
 
@@ -10,6 +9,8 @@ type User struct {
 	Username string `gorm:"unique"`
 	Email    string `gorm:"unique"`
 	Password string
+	Url      string
 	Avatar   string
-	RoleID   orm.Role `gorm:"references:RoleID"`
+	RoleID   uint
+	Role     Role `gorm:"foreignKey:RoleID"`
 }
