@@ -94,7 +94,7 @@ func Login(ctx *gin.Context) {
 		hmacSampleSecret := os.Getenv("JWT_SECRAT_KEY")
 		token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
 			"userID": RowDataDb.ID,
-			"exp":    time.Now().Add(time.Minute * 6).Unix(),
+			"exp":    time.Now().Add(time.Minute * 20).Unix(),
 		})
 
 		// Sign and get the complete encoded token as a string using the secret

@@ -1,7 +1,9 @@
 package post
 
 import (
+	"fmt"
 	"net/http"
+	"strconv"
 	"strings"
 
 	"github.com/buglot/postAPI/orm"
@@ -11,16 +13,16 @@ import (
 
 type CreatePostInput struct {
 	Message        string   `json:"message"`
-	Accessname     string   `json:"access_id" binding:"required"`
-	TypeofPostname string   `json:"typeof_post_id" binding:"required"`
+	Accessname     string   `json:"accessname" binding:"required"`
+	TypeofPostname string   `json:"typeofpostname" binding:"required"`
 	Images         []string `json:"images"`
 }
 
 func CreatePost(ctx *gin.Context) {
-	var userid = ctx.MustGet("userID").(uint)
+	userid := ctx.MustGet("userID")
 	var input CreatePostInput
 	if err := ctx.ShouldBindJSON(&input); err != nil {
-		ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		ctx.JSON(http.StatusBadRequest, gin.H{"messeage": err.Error()})
 		return
 	}
 	var access orm.Access
@@ -35,9 +37,11 @@ func CreatePost(ctx *gin.Context) {
 		ctx.JSON(http.StatusBadRequest, gin.H{"message": result.Error.Error()})
 		return
 	}
+	idStr := fmt.Sprintf("%v", userid)
+	userIDuintm, _ := strconv.ParseUint(idStr, 10, 32)
 	post := orm.Post{
 		Url:          strings.Replace(uuid.NewString(), "-", "", 4),
-		UserID:       userid,
+		UserID:       uint(userIDuintm),
 		Message:      input.Message,
 		AccessID:     access.ID,
 		TypeofPostID: typepost.ID,
@@ -46,7 +50,7 @@ func CreatePost(ctx *gin.Context) {
 		post.Image = append(post.Image, orm.Image{Url: imgUrl})
 	}
 	if err := orm.Db.Create(&post).Error; err != nil {
-		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		ctx.JSON(http.StatusInternalServerError, gin.H{"message": err.Error()})
 		return
 	}
 	ctx.JSON(http.StatusCreated, gin.H{

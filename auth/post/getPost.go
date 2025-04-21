@@ -7,6 +7,18 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+type SentData struct {
+	Name         string   `json:"Name" binding:"required"`
+	Avatar       string   `json:"Avatar" binding:"required"`
+	TypeofAccess string   `json:"TypeofAccess" binding:"required"`
+	TypeofPost   string   `json:"TypeofPost" binding:"required"`
+	Message      string   `json:"Message"`
+	Date         string   `json:"Date" binding:"required"`
+	Images       []string `json:"Images"`
+	ErrorMessage string   `json:"errormessage"`
+	Url          string   `json:"url"`
+}
+
 func GetPost(ctx *gin.Context) {
 	userid := ctx.MustGet("userID")
 	var posts []orm.Post
@@ -23,5 +35,24 @@ func GetPost(ctx *gin.Context) {
 		ctx.JSON(http.StatusInternalServerError, gin.H{"message": result.Error.Error()})
 		return
 	}
-	ctx.IndentedJSON(http.StatusOK, posts)
+	var data []SentData
+	for _, post := range posts {
+		var images []string
+		for _, img := range post.Image {
+			images = append(images, img.Url) // สมมุติว่า struct Image มีฟิลด์ชื่อ Url
+		}
+		converted := SentData{
+			Name:         post.User.Username,
+			Avatar:       post.User.Avatar,
+			TypeofAccess: post.Access.Name,
+			TypeofPost:   post.TypeofPost.Name,
+			Message:      post.Message,
+			Date:         post.CreatedAt.Format("2006-01-02 15:04:05"),
+			Images:       images,
+			Url: post.Url,
+			ErrorMessage: "",
+		}
+		data = append(data, converted)
+	}
+	ctx.IndentedJSON(http.StatusOK, data)
 }

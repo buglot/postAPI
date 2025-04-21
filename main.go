@@ -35,6 +35,6 @@ func main() {
 	Authen.Static("/img", "./uploads")
 	Authen.GET("/getPost", post.GetPost)
 	Authen.POST("/imgupload", post.Uploads)
-	Authen.POST("/Post")
+	Authen.POST("/Post", post.CreatePost)
 	router.Run("localhost:8080")
 }

@@ -25,6 +25,6 @@ func Uploads(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, gin.H{
 		"message":  "Upload successful",
 		"filename": newFileName,
-		"url":      "/uploads/" + newFileName,
+		"url":      "/auth/img/" + newFileName,
 	})
 }
