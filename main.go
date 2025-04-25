@@ -6,6 +6,7 @@ import (
 
 	"github.com/buglot/postAPI/auth"
 	"github.com/buglot/postAPI/auth/post"
+	"github.com/buglot/postAPI/auth/profile"
 	"github.com/buglot/postAPI/middleware"
 	"github.com/buglot/postAPI/orm"
 	"github.com/gin-contrib/cors"
@@ -36,5 +37,7 @@ func main() {
 	Authen.GET("/getPost", post.GetPost)
 	Authen.POST("/imgupload", post.Uploads)
 	Authen.POST("/Post", post.CreatePost)
+	Authen.GET("/Profile", profile.Profile)
+	Authen.GET("/ProfileUrl", profile.GetProfile)
 	router.Run("localhost:8080")
 }

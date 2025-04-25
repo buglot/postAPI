@@ -9,10 +9,10 @@ import (
 )
 
 type Username struct {
-	Username string `json:"username"`
-	Url      string `json:"url"`
-	Avatar   string `json:"avatar"`
-	Email    string `json:"email"`
+	Username    string `json:"Username"`
+	Url         string `json:"Url"`
+	Avatar      string `json:"Avatar"`
+	Email       string `json:"Email"`
 }
 
 func Profile(ctx *gin.Context) {
