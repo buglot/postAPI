@@ -5,6 +5,7 @@ import (
 	"time"
 
 	"github.com/buglot/postAPI/auth"
+	img "github.com/buglot/postAPI/auth/Img"
 	"github.com/buglot/postAPI/auth/post"
 	"github.com/buglot/postAPI/auth/profile"
 	"github.com/buglot/postAPI/middleware"
@@ -33,11 +34,13 @@ func main() {
 	router.POST("/register", auth.Register)
 	router.POST("/login", auth.Login)
 	Authen := router.Group("/auth", middleware.Auth())
-	Authen.Static("/img", "./uploads")
+	router.Static("/img/public/", "./img/profile")
+	Authen.GET("/img/:filename", img.GetImg)
 	Authen.GET("/getPost", post.GetPost)
 	Authen.POST("/imgupload", post.Uploads)
 	Authen.POST("/Post", post.CreatePost)
 	Authen.GET("/Profile", profile.Profile)
 	Authen.GET("/ProfileUrl", profile.GetProfile)
+	Authen.GET("/GetPostInProfile", post.GetPostInProfile)
 	router.Run("localhost:8080")
 }

@@ -31,7 +31,7 @@ type Access struct {
 }
 type TypeofPost struct {
 	gorm.Model
-	Name string `grom:"type:enum('daily','shop');default:'daily';not null;unique"`
+	Name string `gorm:"type:enum('daily','shop');default:'daily';not null;unique"`
 }
 type Image struct {
 	gorm.Model

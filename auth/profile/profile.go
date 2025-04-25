@@ -1,7 +1,9 @@
 package profile
 
 import (
+	"fmt"
 	"net/http"
+	"strconv"
 
 	"github.com/buglot/postAPI/orm"
 	"github.com/gin-gonic/gin"
@@ -31,7 +33,8 @@ func GetProfile(ctx *gin.Context) {
 		Avatar:      data.Avatar,
 		IsMyProfile: false,
 	}
-	if data.ID == userid {
+	useridint, _ := strconv.Atoi(fmt.Sprintf("%v", userid))
+	if data.ID == uint(useridint) {
 		sendr.IsMyProfile = true
 	}
 	ctx.IndentedJSON(http.StatusOK, sendr)
