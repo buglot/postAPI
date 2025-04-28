@@ -11,7 +11,7 @@ import (
 
 func Auth() gin.HandlerFunc {
 	return func(ctx *gin.Context) {
-		header := ctx.Request.Header.Get("Authorization")
+		header := ctx.GetHeader("Authorization")
 		hmacSampleSecret := []byte(os.Getenv("JWT_SECRAT_KEY"))
 		tokenString := strings.Replace(header, "Bearer ", "", 1)
 		token, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {

@@ -8,7 +8,7 @@ import (
 
 type Role struct {
 	gorm.Model
-	Name string `gorm:"type:enum('user','admin');default:'admin'"`
+	Name string `gorm:"not null"`
 }
 
 func RoleDefault() {
@@ -29,7 +29,7 @@ func RoleDefault() {
 	err = Db.Where("name = ?", "admin").First(&role).Error
 	if err != nil {
 		if err == gorm.ErrRecordNotFound {
-			role = Role{Name: "user"}
+			role = Role{Name: "admin"}
 			if err := Db.Create(&role).Error; err != nil {
 				fmt.Println("Failed to create role:", err)
 				return
