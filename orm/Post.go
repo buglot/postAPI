@@ -18,6 +18,7 @@ type Post struct {
 	TypeofPostID uint
 	TypeofPost   TypeofPost `gorm:"foreignKey:TypeofPostID"`
 	LikePost     []LikePost `gorm:"foreignKey:PostID"`
+	Comment      []Comment  `gorm:"foreignKey:PostID"`
 }
 type LikePost struct {
 	gorm.Model
@@ -37,6 +38,13 @@ type Image struct {
 	gorm.Model
 	Url    string `gorm:"type:varchar(255);not null"`
 	PostID uint
+}
+type Comment struct {
+	gorm.Model
+	UserID  uint
+	User    User `gorm:"foreignKey:UserID"`
+	PostID  uint
+	Comment string `gorm:"not null"`
 }
 
 func TypeofPostDefault() {

@@ -16,5 +16,5 @@ func InitDB() {
 	if err != nil {
 		panic(err)
 	}
-	Db.AutoMigrate(&User{}, &Post{}, &Image{}, &Follow{})
+	Db.AutoMigrate(&User{}, &Post{}, &Image{}, &Follow{}, &LikePost{}, &Comment{})
 }
