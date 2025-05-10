@@ -24,7 +24,7 @@ func main() {
 	orm.InitDB()
 	orm.RoleDefault()
 	orm.AccessAndTypePostDefault()
-	
+
 	router.Use(cors.New(cors.Config{
 		AllowAllOrigins:  true,
 		AllowMethods:     []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
@@ -47,5 +47,6 @@ func main() {
 	Authen.GET("/ProfileUrl", profile.GetProfile)
 	Authen.GET("/GetPostInProfile", post.GetPostInProfile)
 	Authen.GET("/GetComments", post.GetComments)
+	Authen.POST("/follow", profile.Follow_friend)
 	router.Run("localhost:8080")
 }
