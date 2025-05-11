@@ -1,6 +1,7 @@
 package post
 
 import (
+	"encoding/json"
 	"net/http"
 	"path/filepath"
 
@@ -31,9 +32,19 @@ func Uploads(ctx *gin.Context) {
 	})
 }
 
+type EditUp struct {
+	Url string `json:"url"`
+}
+
 func UploadProfile(ctx *gin.Context) {
 	userid := lib.AnyToUInt(ctx.MustGet("userID"))
 	file, err := ctx.FormFile("image")
+	jsonData := ctx.PostForm("data")
+	var input EditUp
+	if err := json.Unmarshal([]byte(jsonData), &input); err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{"message": "Invalid JSON: " + err.Error()})
+		return
+	}
 	if err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{"error": "No file is received"})
 		return
@@ -48,7 +59,7 @@ func UploadProfile(ctx *gin.Context) {
 	}
 	var user orm.User
 	orm.Db.Where("id = ?", userid).First(&user)
-	user.Avatar = "/img/public/" + newFileName
+	user.Avatar = input.Url + "/img/public/" + newFileName
 	orm.Db.Save(&user)
 	ctx.JSON(http.StatusOK, gin.H{
 		"message":  "Upload successful",

@@ -8,6 +8,7 @@ import (
 	img "github.com/buglot/postAPI/auth/Img"
 	"github.com/buglot/postAPI/auth/post"
 	"github.com/buglot/postAPI/auth/profile"
+	"github.com/buglot/postAPI/auth/search"
 	"github.com/buglot/postAPI/middleware"
 	"github.com/buglot/postAPI/orm"
 	"github.com/gin-contrib/cors"
@@ -49,6 +50,8 @@ func main() {
 	Authen.GET("/GetComments", post.GetComments)
 	Authen.POST("/follow", profile.Follow_friend)
 	Authen.POST("/edit", post.EditPost)
-	Authen.POST("/delPost",post.DeletePost)
+	Authen.POST("/delPost", post.DeletePost)
+	Authen.POST("/profileAvatar", post.UploadProfile)
+	router.GET("/search", search.GetNameAndUrl)
 	router.Run("0.0.0.0:8080")
 }

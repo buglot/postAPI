@@ -1,6 +1,7 @@
 package post
 
 import (
+	"fmt"
 	"net/http"
 
 	"github.com/buglot/postAPI/lib"
@@ -22,8 +23,9 @@ func EditPost(ctx *gin.Context) {
 		})
 		return
 	}
+	fmt.Println(dataEdit.Images)
 	var dataDB orm.Post
-	if err := orm.Db.Where("url = ?", dataEdit.Url).First(&dataDB).Error; err != nil {
+	if err := orm.Db.Preload("Image").Where("url = ?", dataEdit.Url).First(&dataDB).Error; err != nil {
 		ctx.AbortWithStatusJSON(http.StatusBadRequest, gin.H{
 			"message": err.Error(),
 		})
@@ -50,8 +52,18 @@ func EditPost(ctx *gin.Context) {
 	dataDB.Message = dataEdit.Message
 	dataDB.TypeofPostID = typepost.ID
 	dataDB.AccessID = access.ID
+	newImageMap := make(map[string]bool)
 	for _, img := range dataEdit.Images {
-		dataDB.Image = append(dataDB.Image, orm.Image{Url: img})
+
+		newImageMap[img] = true
+	}
+	for _, oldImg := range dataDB.Image {
+
+		fmt.Println(oldImg.Url)
+		if !newImageMap[oldImg.Url] {
+			fmt.Println(oldImg.Url + " delete")
+			orm.Db.Delete(&oldImg)
+		}
 	}
 	err := orm.Db.Save(&dataDB).Error
 	if err != nil {
