@@ -1,7 +1,7 @@
 package main
 
 import (
-	"log"
+	"fmt"
 	"time"
 
 	"github.com/buglot/postAPI/auth"
@@ -18,7 +18,7 @@ import (
 func main() {
 	err := godotenv.Load(".env")
 	if err != nil {
-		log.Fatal("Error loading .env file")
+		fmt.Println("Error loading .env file")
 	}
 	router := gin.Default()
 	orm.InitDB()
@@ -48,5 +48,5 @@ func main() {
 	Authen.GET("/GetPostInProfile", post.GetPostInProfile)
 	Authen.GET("/GetComments", post.GetComments)
 	Authen.POST("/follow", profile.Follow_friend)
-	router.Run("localhost:8080")
+	router.Run("0.0.0.0:8080")
 }
