@@ -2,7 +2,6 @@ package search
 
 import (
 	"errors"
-	"fmt"
 	"net/http"
 
 	"github.com/buglot/postAPI/orm"
@@ -12,10 +11,11 @@ import (
 
 func GetNameAndUrl(ctx *gin.Context) {
 	search := ctx.Query("name")
-	query := fmt.Sprintf("_%%%s%%_", search)
+	pattern := "%" + search + "%"
+
 	var users []orm.User
 	err := orm.Db.
-		Where("url LIKE ? OR username LIKE ? OR email LIKE ?", query, query, query).
+		Where("url LIKE ? OR username LIKE ? OR email LIKE ?", pattern, pattern, pattern).
 		Find(&users).Error
 
 	if errors.Is(err, gorm.ErrRecordNotFound) {
