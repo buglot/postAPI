@@ -48,5 +48,7 @@ func main() {
 	Authen.GET("/GetPostInProfile", post.GetPostInProfile)
 	Authen.GET("/GetComments", post.GetComments)
 	Authen.POST("/follow", profile.Follow_friend)
+	Authen.POST("/edit", post.EditPost)
+	Authen.POST("/delPost",post.DeletePost)
 	router.Run("0.0.0.0:8080")
 }
