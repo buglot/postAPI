@@ -87,7 +87,7 @@ func GetPostInProfile(ctx *gin.Context) {
 		return
 	}
 	var posts []orm.Post
-	useridint, err := strconv.Atoi(fmt.Sprintf("%v", userid))
+	useridint, _ := strconv.Atoi(fmt.Sprintf("%v", userid))
 	if user.ID == uint(useridint) { //if same userid
 		result := orm.Db.
 			Joins("JOIN accesses ON accesses.id = posts.access_id").
